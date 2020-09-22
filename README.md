@@ -4,6 +4,8 @@
 
 ### This is smaller
 
+This is new text
+
 Normal text
 
 **bolded text**
