@@ -32,7 +32,7 @@ class MapsSpider(scrapy.Spider):
             # map_author = map.css(".membertip activity_name tipso_style").get() **need to figure out**
             # map_description = __ still need to figure out**
             map_pageurl = response.url
-            # map_downloadurl = __ still need to figure out**
+            map_downloadurl = 'www.planetminecraft.com' + map.css(".r-info > a::attr('href')").get()
             map_lastupdateddate = map.css(".timeago::text").get()
             map_dateaccessed = date.today().strftime("%m/%d/%Y")  # date of the scrape in format mm/dd/yyyy
             map_source = "planetminecraft all-time best"
