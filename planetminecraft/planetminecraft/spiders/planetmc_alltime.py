@@ -10,6 +10,7 @@ class MapsSpider(scrapy.Spider):
             'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=1',
             'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=2'
         ]
+        # need to make this into an algorithm**
         # urls for most popular maps: all time
         for url in urls:      # the urls we are scraping
             yield scrapy.Request(url=url, callback=self.parse)
@@ -31,8 +32,11 @@ class MapsSpider(scrapy.Spider):
             map_subtitle = map.css(".r-subtitle").css(".r-subject::text").get()
             # map_author = map.css(".membertip activity_name tipso_style").get() **need to figure out**
             # map_description = __ still need to figure out**
+                # planetmc doesn't really have descriptions so unsure what chase wants**
             map_pageurl = response.url
-            map_downloadurl = 'www.planetminecraft.com' + map.css(".r-info > a::attr('href')").get()
+            map_descriptionurl = 'www.planetminecraft.com' + map.css(".r-info > a::attr('href')").get()
+            # map_downloadurl = _ still need to figure out**
+                # follow descriptionurl link, then it's .third-party-download**
             map_lastupdateddate = map.css(".timeago::text").get()
             map_dateaccessed = date.today().strftime("%m/%d/%Y")  # date of the scrape in format mm/dd/yyyy
             map_source = "planetminecraft all-time best"
@@ -40,7 +44,7 @@ class MapsSpider(scrapy.Spider):
             index_list = [0]
             while map.css(".r-stats")[3].get().find('i class') != -1:     # views, downloads, comments count
                 index_list.append(map.css(".r-stats")[3].get().find('i class'))
-                # what is happening here??***
+                # what is happening here??**
 
             dict_maps.update({map_title:{"Subtitle":map_subtitle}})
             # stores all the data in the dict, searchable by subtitle
