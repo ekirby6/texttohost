@@ -35,6 +35,7 @@ class MapsSpider(scrapy.Spider):
                 # planetmc doesn't really have descriptions so unsure what chase wants**
             map_pageurl = response.url
             map_descriptionurl = 'www.planetminecraft.com' + map.css(".r-info > a::attr('href')").get()
+            # scrapy crawl "download url" (like author spider from tutorial?)
             # map_downloadurl = _ still need to figure out**
                 # follow descriptionurl link, then it's .third-party-download**
             map_lastupdateddate = map.css(".timeago::text").get()
@@ -50,3 +51,4 @@ class MapsSpider(scrapy.Spider):
             # stores all the data in the dict, searchable by subtitle
             pass
         print(dict_maps)   # want to write to csv file**
+
