@@ -29,13 +29,13 @@ class MapsSpider(scrapy.Spider):
         for map in r2.css(".r-info"):     # iterates through all of the maps in the selected section
             map_title = map.css(".r-title::text").get()
             map_subtitle = map.css(".r-subtitle").css(".r-subject::text").get()
-            # map_author = map.css(".image-loaded").get()
+            # map_author = map.css(".membertip activity_name tipso_style").get() **need to figure out**
             # map_description = __ still need to figure out**
-            # map_pageurl = __ still need to figure out**
+            map_pageurl = response.url
             # map_downloadurl = __ still need to figure out**
             map_lastupdateddate = map.css(".timeago::text").get()
             map_dateaccessed = date.today().strftime("%m/%d/%Y")  # date of the scrape in format mm/dd/yyyy
-            map_source = "planetminecraft"
+            map_source = "planetminecraft all-time best"
 
             index_list = [0]
             while map.css(".r-stats")[3].get().find('i class') != -1:     # views, downloads, comments count
