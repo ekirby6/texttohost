@@ -32,7 +32,7 @@ class MapsSpider(scrapy.Spider):
             map_subtitle = map.css(".r-subtitle").css(".r-subject::text").get()
             # map_author = map.css(".membertip activity_name tipso_style").get() **need to figure out**
             # map_description = __ still need to figure out**
-                # planetmc doesn't really have descriptions so unsure what chase wants**
+                # planetmc doesn't really have descriptions so unsure what chase wants here**
             map_pageurl = response.url
             map_descriptionurl = 'www.planetminecraft.com' + map.css(".r-info > a::attr('href')").get()
             # scrapy crawl "download url" (like author spider from tutorial?)
@@ -50,5 +50,5 @@ class MapsSpider(scrapy.Spider):
             dict_maps.update({map_title:{"Subtitle":map_subtitle}})
             # stores all the data in the dict, searchable by subtitle
             pass
-        print(dict_maps)   # want to write to csv file**
+        print(dict_maps)   # want to write to csv or json file**
 
