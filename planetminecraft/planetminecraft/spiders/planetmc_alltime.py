@@ -23,20 +23,20 @@ class MapsSpider(scrapy.Spider):
             f.write(response.body)
         self.log('Saved file %s' % filename)  # logs that it was actually saved
 
-        r2 = response.css(".content")   # found using selector gadget, the center section
+        r2 = response.css(".content")   # found using selector gadget, the center section. start big & get smaller
 
         dict_maps = {}     # creating empty dictionary
 
         for map in r2.css(".r-info"):     # iterates through all of the maps in the selected section
             map_title = map.css(".r-title::text").get()
             map_subtitle = map.css(".r-subtitle").css(".r-subject::text").get()
-            # map_author = map.css(".membertip activity_name tipso_style").get() **need to figure out**
-            # map_description = __ still need to figure out**
+            # map_author = map.css(".membertip activity_name tipso_style").get() **need to figure out** search btw title & class
+            # map_description = __ still need to figure out** dw about
                 # planetmc doesn't really have descriptions so unsure what chase wants here**
             map_pageurl = response.url
             map_descriptionurl = 'www.planetminecraft.com' + map.css(".r-info > a::attr('href')").get()
             # scrapy crawl "download url" (like author spider from tutorial?)
-            # map_downloadurl = _ still need to figure out**
+            # map_downloadurl = _ still need to figure out** dw about for now
                 # follow descriptionurl link, then it's .third-party-download**
             map_lastupdateddate = map.css(".timeago::text").get()
             map_dateaccessed = date.today().strftime("%m/%d/%Y")  # date of the scrape in format mm/dd/yyyy
@@ -45,10 +45,11 @@ class MapsSpider(scrapy.Spider):
             index_list = [0]
             while map.css(".r-stats")[3].get().find('i class') != -1:     # views, downloads, comments count
                 index_list.append(map.css(".r-stats")[3].get().find('i class'))
-                # what is happening here??**
+                # what is happening here??** need to separate out the 3 icons, put a null value if one is missing
 
             dict_maps.update({map_title:{"Subtitle":map_subtitle}})
             # stores all the data in the dict, searchable by subtitle
             pass
-        print(dict_maps)   # want to write to csv or json file**
+        print(dict_maps)   # want to write to csv first and then later json file**
+        # work on author and stats and algorithm
 
