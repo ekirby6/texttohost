@@ -20,6 +20,8 @@ class MapSpider(scrapy.Spider):
             'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=2'
         ]
         # urls for most popular maps: all time
+        # **need to change this to algorithm!
+
         for url in urls:      # the urls we are scraping
             yield scrapy.Request(url=url, callback=self.parse)  # parses the urls by attributes
 
@@ -33,7 +35,7 @@ class MapSpider(scrapy.Spider):
 
         r2 = response.css(".content")   # found using selector gadget, the center section. start big & get smaller
 
-        map_dict = {}     # creating empty dictionary
+        # map_dict = {}     # creating empty dictionary
 
         for map in r2.css(".r-info"):     # iterates through all of the maps in the selected section
             map_title = map.css(".r-title::text").get()
@@ -62,18 +64,23 @@ class MapSpider(scrapy.Spider):
             str_comments = str2[str2.find('chat_bubble')+24:str2.find('</span></div>')]    # count of map comments
             map_comments = convert_to_int(str_comments)
 
-            # index_list = [0]
-            #
-            # if map.css(".r-stats")[3].get().find('i class') != -1:     # views, downloads, comments count
-            #     index_list.append(map.css(".r-stats")[3].get().find('i class'))
-            # else:
-            #     index_list.append("NA")     # appends "NA" if no data is available for views, downloads, or comments
-            # **include filter to put a null value if one stat group is missing??
+            # **include filter to put a null value ("NA") if a stat is missing??
 
-            map_dict.update({map_title:{"Subtitle":map_subtitle}})
-            # stores all the data in the dict, searchable by subtitle
-            pass
-        print(map_dict)   # write to csv first and then later json file**
-        # work on author and stats and algorithm/dict/storage**
+           # map_dict.update({map_title:{"Subtitle":map_subtitle}}) # stores all the data in the dict, searchable by subtitle
+        #     pass
+        # print(map_dict)   # write to csv first and then later json file**
+            yield {
+                'title': map_title,
+                'subtitle': map_subtitle,
+                'author': map_author,
+                'page URL': map_pageurl,
+                'map description URL': map_descriptionurl,
+                'date of last update': map_lastupdateddate,
+                'date accessed': map_dateaccessed,
+                'map source': map_source,
+                'views': map_views,
+                'downloads': map_downloads,
+                'comments': map_comments
+            }
 
-
+        # work on NA stats and algorithm/dict/storage**
