@@ -2,7 +2,7 @@ import scrapy
 from datetime import date
 
 
-class MapsSpider(scrapy.Spider):
+class MapSpider(scrapy.Spider):
     name = "pmc 7d maps"                 # use the name to call the web scraping in the terminal
 
     def start_requests(self):

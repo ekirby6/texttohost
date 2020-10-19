@@ -2,7 +2,16 @@ import scrapy                # library used for web scraping
 from datetime import date    # used to get the date stamp of the scrape
 
 
-class MapsSpider(scrapy.Spider):
+def convert_to_int(str_num):   # used to convert the map stats numbers into numeric integer forms
+    if str_num[-1:] == 'k':  # check if the last digit is k
+        return int(float(str_num[:-1]) * 1000)  # Remove the last digit with [:-1], then convert to integer
+    elif str_num[-1:] == 'm':  # check if the last digit is m
+        return int(float(str_num[:-1]) * 1000000)  # Remove the last digit with [:-1], then convert to integer
+    else:  # just in case the number doesn't have an m or k
+        return int(str_num)  # simply converts to integer
+
+
+class MapSpider(scrapy.Spider):
     name = "pmc alltime maps"                 # use the name to call the web scraping in the terminal: scrapy crawl "_"
 
     def start_requests(self):
@@ -24,17 +33,17 @@ class MapsSpider(scrapy.Spider):
 
         r2 = response.css(".content")   # found using selector gadget, the center section. start big & get smaller
 
-        dict_maps = {}     # creating empty dictionary
+        map_dict = {}     # creating empty dictionary
 
         for map in r2.css(".r-info"):     # iterates through all of the maps in the selected section
             map_title = map.css(".r-title::text").get()
             map_subtitle = map.css(".r-subtitle").css(".r-subject::text").get()
 
             # finding map author using the string methods
-            str = map.css(".contributed").get()
-            author_start = str.find('load">') + 7  # start of author's name in the string
-            author_end = str.find('</a>') - 1     # end of author's name in the string
-            map_author = str[author_start:author_end]  #sliced substring including only the formatted author's name
+            str1 = map.css(".contributed").get()
+            author_start = str1.find('load">') + 7  # start of author's name in the string
+            author_end = str1.find('</a>') - 1     # end of author's name in the string
+            map_author = str1[author_start:author_end]  # sliced substring including only the formatted author's name
 
             # map_description- planetmc doesn't have descriptions so disregard
             map_pageurl = response.url  # the main page url that the map was on, for records
@@ -44,8 +53,14 @@ class MapsSpider(scrapy.Spider):
             map_dateaccessed = date.today().strftime("%m/%d/%Y")  # date of the scrape in format mm/dd/yyyy
             map_source = "planetminecraft all-time best"
 
-
-
+            # map stats (get in string format, then convert to int
+            str2 = map.css(".r-stats").get()
+            str_views = str2[str2.find('visibility')+23:str2.find('get_app')-33]  # count of map views
+            map_views = convert_to_int(str_views)
+            str_downloads = str2[str2.find('get_app') + 20:str2.find('chat_bubble') - 33]  # count of map downloads
+            map_downloads = convert_to_int(str_downloads)
+            str_comments = str2[str2.find('chat_bubble')+24:str2.find('</span></div>')]    # count of map comments
+            map_comments = convert_to_int(str_comments)
 
             # index_list = [0]
             #
@@ -53,11 +68,12 @@ class MapsSpider(scrapy.Spider):
             #     index_list.append(map.css(".r-stats")[3].get().find('i class'))
             # else:
             #     index_list.append("NA")     # appends "NA" if no data is available for views, downloads, or comments
-            #     # what is happening here??** need to separate out the 3 icons, put a null value if one is missing
+            # **include filter to put a null value if one stat group is missing??
 
-            dict_maps.update({map_title:{"Subtitle":map_subtitle}})
+            map_dict.update({map_title:{"Subtitle":map_subtitle}})
             # stores all the data in the dict, searchable by subtitle
             pass
-        print(dict_maps)   # write to csv first and then later json file**
+        print(map_dict)   # write to csv first and then later json file**
         # work on author and stats and algorithm/dict/storage**
+
 
