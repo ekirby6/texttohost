@@ -17,7 +17,29 @@ class MapSpider(scrapy.Spider):
     def start_requests(self):
         urls = [
             'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=1',
-            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=2'
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=2',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=3',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=4',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=5',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=6',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=7',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=8',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=9',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=10',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=11',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=12',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=13',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=14',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=15',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=16',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=17',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=18',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=19',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=20',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=21',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=22',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=23',
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=24'
         ]
         # urls for most popular maps: last 7 days
         # **need to change this to algorithm!
@@ -84,4 +106,6 @@ class MapSpider(scrapy.Spider):
                 'comments': map_comments
             }
 
-        # work on NA stats and algorithm**
+        # **work on NA stats filter, update page number, and algorithm using .pagination_next button**
+        # **insert if statement checking if page = last_page_num then output status = Complete, else status = Fail
+            # send out date & time, page, last_page_num, and source name

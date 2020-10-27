@@ -17,7 +17,35 @@ class MapSpider(scrapy.Spider):
     def start_requests(self):
         urls = [
             'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=1',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=2'
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=2',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=3',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=4',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=5',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=6',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=7',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=8',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=9',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=10',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=11',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=12',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=13',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=14',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=15',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=16',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=17',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=18',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=19',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=20',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=21',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=22',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=23',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=24',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=25',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=26',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=27',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=28',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=29',
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=30'
         ]
         # urls for most popular maps: all time
         # **need to change this to algorithm!
@@ -28,6 +56,7 @@ class MapSpider(scrapy.Spider):
     def parse(self, response):
         page = response.url[-1]  # grabs the page number from the website url
         # [-1] gives the last character (the page number)
+        # **this needs to be updated to include all # after the = since we now have page numbers with 2+ digits
         filename = 'pmcalltimemaps-%s.html' % page  # need to name the files with different names so use the page number
         with open(filename, 'wb') as f:
             f.write(response.body)
@@ -84,4 +113,6 @@ class MapSpider(scrapy.Spider):
                 'comments': map_comments
             }
 
-        # work on NA stats and algorithm**
+        # **work on NA stats filter, update page number, and algorithm using .pagination_next button**
+        # **insert if statement checking if page = last_page_num then output status = Complete, else status = Fail
+            # send out date & time, page, last_page_num, and source name
