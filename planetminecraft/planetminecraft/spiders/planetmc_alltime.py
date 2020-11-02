@@ -93,6 +93,7 @@ class MapSpider(scrapy.Spider):
 
             # FIXME: **include filter to put a null value ("NA") if a stat is missing??
 
+
             # dict_maps = {}  # creating empty dictionary   # would be called above for loop
             # map_dict.update({map_title:{"Subtitle":map_subtitle}})
             # stores all the data in the dict, searchable by subtitle. just need to make empty dict first

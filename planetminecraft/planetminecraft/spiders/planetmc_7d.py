@@ -78,11 +78,20 @@ class MapSpider(scrapy.Spider):
 
             # map stats (get in string format, then convert to int
             str2 = map.css(".r-stats").get()
-            str_views = str2[str2.find('visibility') + 23:str2.find('get_app') - 33]  # count of map views
+            if str2.find('visibility') != -1:    # error checking for if there is no views
+                str_views = str2[str2.find('visibility') + 23:str2.find('get_app') - 33]  # count of map views
+            else:
+                str_views = 0
             map_views = convert_to_int(str_views)
-            str_downloads = str2[str2.find('get_app') + 20:str2.find('chat_bubble') - 33]  # count of map downloads
+            if str2.find('get_app') != -1:    # error checking for if there is no downloads
+                str_downloads = str2[str2.find('get_app') + 20:str2.find('chat_bubble') - 33]  # count of map downloads
+            else:
+                str_downloads = 0
             map_downloads = convert_to_int(str_downloads)
-            str_comments = str2[str2.find('chat_bubble') + 24:str2.find('</span></div>')]  # count of map comments
+            if str2.find('chat_bubble') != -1:      # error checking for if there is no comments
+                str_comments = str2[str2.find('chat_bubble') + 24:str2.find('</span></div>')]  # count of map comments
+            else:
+                str_comments = 0
             map_comments = convert_to_int(str_comments)
 
             # FIXME: **include filter to put a null value ("NA") if a stat is missing??
