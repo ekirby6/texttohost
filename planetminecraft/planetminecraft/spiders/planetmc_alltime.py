@@ -113,6 +113,6 @@ class MapSpider(scrapy.Spider):
                 'comments': map_comments
             }
 
-        # FIXME: **work on NA stats filter (try if error), update page number, and algorithm using .pagination_next button**
+        # FIXME: **work on NA stats filter (try if error) and algorithm using .pagination_next button**
         # FIXME: **insert if statement checking if page = last_page_num then output status = Complete, else status = Fail
-            # send out date & time, page, last_page_num, and source name
+            # FIXME: send out date & time, page, last_page_num, and source name

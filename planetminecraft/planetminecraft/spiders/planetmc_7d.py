@@ -78,12 +78,13 @@ class MapSpider(scrapy.Spider):
 
             # map stats (get in string format, then convert to int
             str2 = map.css(".r-stats").get()
-            if str2.find('visibility') != -1:    # error checking for if there is no views
+            # FIXME: update string parsing so not reliant on presence of other fields if not there
+            if str2.find('visibility') != -1:    # error checking for if there is no views  # FIXME
                 str_views = str2[str2.find('visibility') + 23:str2.find('get_app') - 33]  # count of map views
             else:
                 str_views = 0
             map_views = convert_to_int(str_views)
-            if str2.find('get_app') != -1:    # error checking for if there is no downloads
+            if str2.find('get_app') != -1:    # error checking for if there is no downloads  # FIXME
                 str_downloads = str2[str2.find('get_app') + 20:str2.find('chat_bubble') - 33]  # count of map downloads
             else:
                 str_downloads = 0
@@ -93,8 +94,6 @@ class MapSpider(scrapy.Spider):
             else:
                 str_comments = 0
             map_comments = convert_to_int(str_comments)
-
-            # FIXME: **include filter to put a null value ("NA") if a stat is missing??
 
             # dict_maps = {}  # creating empty dictionary   # would be called above for loop
             # map_dict.update({map_title:{"Subtitle":map_subtitle}})
@@ -117,4 +116,4 @@ class MapSpider(scrapy.Spider):
 
         # FIXME: **work on NA stats filter and algorithm using .pagination_next button**
         # FIXME: **insert if statement checking if page = last_page_num then output status = Complete, else status = Fail
-            # send out date & time, page, last_page_num, and source name
+            #FIXME: send out date & time, page, last_page_num, and source name
