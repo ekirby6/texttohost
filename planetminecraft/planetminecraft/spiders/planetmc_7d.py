@@ -42,14 +42,14 @@ class MapSpider(scrapy.Spider):
             'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=24'
         ]
         # urls for most popular maps: last 7 days
-        # **need to change this to algorithm!
+        # FIXME: need to change this to algorithm or .pagination.next button using CSS selector
 
         for url in urls:      # the urls we are scraping
             yield scrapy.Request(url=url, callback=self.parse)   # parses the urls by attributes
 
     def parse(self, response):
-        page = response.url[-1]   # grabs the page number from the website url
-        # [-1] gives the last character (the page number)
+        # page = response.url[-1]  # grabs the last char (the page number) from the website url
+        page = response.url[response.url.find('&p=') + 3:]  # grabs the page number from the website url
         filename = 'pmc7dmaps-%s.html' % page  # need to name the files with different names so use the page number
         with open(filename, 'wb') as f:
             f.write(response.body)
@@ -85,7 +85,7 @@ class MapSpider(scrapy.Spider):
             str_comments = str2[str2.find('chat_bubble') + 24:str2.find('</span></div>')]  # count of map comments
             map_comments = convert_to_int(str_comments)
 
-            # **include filter to put a null value ("NA") if a stat is missing??
+            # FIXME: **include filter to put a null value ("NA") if a stat is missing??
 
             # dict_maps = {}  # creating empty dictionary   # would be called above for loop
             # map_dict.update({map_title:{"Subtitle":map_subtitle}})
@@ -106,6 +106,6 @@ class MapSpider(scrapy.Spider):
                 'comments': map_comments
             }
 
-        # **work on NA stats filter, update page number, and algorithm using .pagination_next button**
-        # **insert if statement checking if page = last_page_num then output status = Complete, else status = Fail
+        # FIXME: **work on NA stats filter and algorithm using .pagination_next button**
+        # FIXME: **insert if statement checking if page = last_page_num then output status = Complete, else status = Fail
             # send out date & time, page, last_page_num, and source name
