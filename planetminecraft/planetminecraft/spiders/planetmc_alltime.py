@@ -15,6 +15,7 @@ class MapSpider(scrapy.Spider):
     name = "pmc alltime maps"  # call web scraping in the terminal: scrapy crawl "pmc alltime maps" -o pmcalltime.json
 
     def start_requests(self):
+        # urls for most popular maps: all time
         urls = [
             'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=1',
             'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=2',
@@ -47,7 +48,7 @@ class MapSpider(scrapy.Spider):
             'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=29',
             'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=30'
         ]
-        # urls for most popular maps: all time
+
         # FIXME: **need to change this to algorithm or .pagination.next button using CSS selector
 
         for url in urls:  # the urls we are scraping
@@ -82,7 +83,7 @@ class MapSpider(scrapy.Spider):
             map_dateaccessed = date.today().strftime("%m/%d/%Y")  # date of the scrape in format mm/dd/yyyy
             map_source = "planetminecraft all-time best"
 
-            # map stats (get in string format, then convert to int
+            # map stats (get in string format, then convert to int)
             str2 = map.css(".r-stats").get()
             str_views = str2[str2.find('visibility') + 23:str2.find('get_app') - 33]  # count of map views
             map_views = convert_to_int(str_views)
