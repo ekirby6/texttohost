@@ -16,7 +16,7 @@ class MapSpider(scrapy.Spider):
 
     def start_requests(self):
         urls = [
-            'https://www.planetminecraft.com/projects/?time_machine=all_time&order=order_popularity&p=1'
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=1'
             # ,
             # 'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=2',
             # 'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=3',
