@@ -98,7 +98,7 @@ class MapSpider(scrapy.Spider):
                 str_downloads = str2[str2.find('get_app') + 20:str2.find('</div>') - 8]
                 str_comments = 0
             elif str2.find('visibility') != -1 and str2.find('chat_bubble') != -1:  # if have views & comments
-                str_views = str2[str2.find('visibility') + 23:str2.find('</span></div>') - 60]
+                str_views = str2[str2.find('visibility') + 23:str2.find('</span></div>') - 59]
                 str_downloads = 0
                 str_comments = str2[str2.find('chat_bubble') + 24:str2.find('</span></div>')]
             elif str2.find('visibility') != -1:  # if only have views (base case)
@@ -130,7 +130,7 @@ class MapSpider(scrapy.Spider):
                 'comments': map_comments
             }
 
-        print("Status: Complete") if page == last_page_num else print("Status: Failure")
+        # print("Status: Complete") if page == last_page_num else print("Status: Failure")
         # print("Ending time: " + str(map_dateaccessed) + str(map_timeaccessed))
         # print("Last Page Successfully Scraped: " + str(page - 1))
         # print("% of Pages Successfully Scraped: " + str((page - 1) / last_page_num))
@@ -138,7 +138,5 @@ class MapSpider(scrapy.Spider):
 
 
         # FIXME: (Jesse) insert algorithm using .pagination_next button or edit page number of URLs in for loop
-        # FIXME: check if printing all maps from each all time (yes) & 7d
+        # FIXME: check if printing all maps from all time (yes) & 7d (no)
         # FIXME: convert to pipeline for outputting instead of JSON or CSV
-        # FIXME: insert if statement checking if page = last_page_num then output status = Complete, else status = Fail
-            # FIXME: send out date & time, page, last_page_num, and source name

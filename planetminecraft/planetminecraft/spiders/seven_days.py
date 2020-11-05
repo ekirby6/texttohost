@@ -16,7 +16,7 @@ class MapSpider(scrapy.Spider):
 
     def start_requests(self):
         urls = [
-            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=1'
+            'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=3'
             # ,
             # 'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=2',
             # 'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=3',
@@ -99,7 +99,7 @@ class MapSpider(scrapy.Spider):
                 str_downloads = str2[str2.find('get_app') + 20:str2.find('</div>') - 8]
                 str_comments = 0
             elif str2.find('visibility') != -1 and str2.find('chat_bubble') != -1:  # if have views & comments
-                str_views = str2[str2.find('visibility') + 23:str2.find('</span></div>') - 60]
+                str_views = str2[str2.find('visibility') + 23:str2.find('</span></div>') - 59]
                 str_downloads = 0
                 str_comments = str2[str2.find('chat_bubble') + 24:str2.find('</span></div>')]
             elif str2.find('visibility') != -1:  # if only have views (base case)
