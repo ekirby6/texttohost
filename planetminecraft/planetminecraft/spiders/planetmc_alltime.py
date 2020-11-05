@@ -1,5 +1,5 @@
 import scrapy  # library used for web scraping
-from datetime import date  # used to get the date stamp of the scrape
+from datetime import date, datetime  # to get the date & time stamp of the scrape
 
 
 def convert_to_int(str_num):  # used to convert the map stats numbers into numeric integer forms
@@ -18,43 +18,45 @@ class MapSpider(scrapy.Spider):
         # urls for most popular maps: all time
         urls = [
             'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=1',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=2',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=3',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=4',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=5',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=6',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=7',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=8',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=9',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=10',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=11',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=12',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=13',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=14',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=15',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=16',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=17',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=18',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=19',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=20',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=21',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=22',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=23',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=24',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=25',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=26',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=27',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=28',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=29',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=30'
-        ]
-
-        # FIXME: **need to change this to algorithm or .pagination.next button using CSS selector
+            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=2']  # testing
+        # urls = [
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=1',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=2',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=3',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=4',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=5',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=6',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=7',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=8',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=9',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=10',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=11',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=12',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=13',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=14',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=15',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=16',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=17',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=18',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=19',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=20',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=21',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=22',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=23',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=24',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=25',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=26',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=27',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=28',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=29',
+        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=30'
+        # ]
 
         for url in urls:  # the urls we are scraping
             yield scrapy.Request(url=url, callback=self.parse)  # parses the urls by attributes
 
     def parse(self, response):
+        last_page_num = 2           # testing- change to actual last page number
         # page = response.url[-1]  # grabs the last char (the page number) from the website url
         page = response.url[response.url.find('&p=')+3:]  # grabs the page number from the website url
         filename = 'pmcalltimemaps-%s.html' % page  # need to name the files with different names so use the page number
@@ -81,23 +83,36 @@ class MapSpider(scrapy.Spider):
             # map_downloadurl - third party download issues, don't worry about for now
             map_lastupdateddate = map.css(".timeago::text").get()  # date from the last update of the map
             map_dateaccessed = date.today().strftime("%m/%d/%Y")  # date of the scrape in format mm/dd/yyyy
+            map_timeaccessed = datetime.now().time()
             map_source = "planetminecraft all-time best"
 
             # map stats (get in string format, then convert to int)
             str2 = map.css(".r-stats").get()
-            str_views = str2[str2.find('visibility') + 23:str2.find('get_app') - 33]  # count of map views
-            map_views = convert_to_int(str_views)
-            str_downloads = str2[str2.find('get_app') + 20:str2.find('chat_bubble') - 33]  # count of map downloads
+            if str2.find('visibility') != -1 and str2.find('get_app') != -1 and str2.find('chat_bubble') != -1:
+                # if all 3 fields present
+                str_views = str2[str2.find('visibility') + 23:str2.find('get_app') - 33]  # count of map views
+                str_downloads = str2[str2.find('get_app') + 20:str2.find('chat_bubble') - 33]  # count of map downloads
+                str_comments = str2[str2.find('chat_bubble') + 24:str2.find('</span></div>')]  # count of map comments
+            elif str2.find('visibility') != -1 and str2.find('get_app') != -1:  # if have views & downloads
+                str_views = str2[str2.find('visibility') + 23:str2.find('get_app') - 33]
+                str_downloads = str2[str2.find('get_app') + 20:str2.find('</div>') - 8]
+                str_comments = 0
+            elif str2.find('visibility') != -1 and str2.find('chat_bubble') != -1:  # if have views & comments
+                str_views = str2[str2.find('visibility') + 23:str2.find('</span></div>') - 60]
+                str_downloads = 0
+                str_comments = str2[str2.find('chat_bubble') + 24:str2.find('</span></div>')]
+            elif str2.find('visibility') != -1:  # if only have views (base case)
+                # always have at least views to be on the popular/best list
+                str_views = str2[str2.find('visibility') + 23:str2.find('</div>') - 9]
+                str_downloads = 0
+                str_comments = 0
+            else:  # if have none of the 3 fields (edge case)
+                str_views = 0
+                str_downloads = 0
+                str_comments = 0
+            map_views = convert_to_int(str_views)  # converting string stats to meaningful integers
             map_downloads = convert_to_int(str_downloads)
-            str_comments = str2[str2.find('chat_bubble') + 24:str2.find('</span></div>')]  # count of map comments
             map_comments = convert_to_int(str_comments)
-
-            # FIXME: **include filter to put a null value ("NA") if a stat is missing??
-
-
-            # dict_maps = {}  # creating empty dictionary   # would be called above for loop
-            # map_dict.update({map_title:{"Subtitle":map_subtitle}})
-            # stores all the data in the dict, searchable by subtitle. just need to make empty dict first
 
             yield {
                 'title': map_title,
@@ -108,12 +123,22 @@ class MapSpider(scrapy.Spider):
                 'map description URL': map_descriptionurl,
                 'date of last update': map_lastupdateddate,
                 'date accessed': map_dateaccessed,
+                'time accessed': map_timeaccessed,
                 'map source': map_source,
                 'views': map_views,
                 'downloads': map_downloads,
                 'comments': map_comments
             }
 
-        # FIXME: **work on NA stats filter (try if error) and algorithm using .pagination_next button**
-        # FIXME: **insert if statement checking if page = last_page_num then output status = Complete, else status = Fail
+        print("Status: Complete") if page == last_page_num else print("Status: Failure")
+        # print("Ending time: " + str(map_dateaccessed) + str(map_timeaccessed))
+        # print("Last Page Successfully Scraped: " + str(page - 1))
+        # print("% of Pages Successfully Scraped: " + str((page - 1) / last_page_num))
+        # print("Source Name: PlanetMinecraft All-Time")
+
+
+        # FIXME: (Jesse) insert algorithm using .pagination_next button or edit page number of URLs in for loop
+        # FIXME: check if printing all maps from each all time (yes) & 7d
+        # FIXME: convert to pipeline for outputting instead of JSON or CSV
+        # FIXME: insert if statement checking if page = last_page_num then output status = Complete, else status = Fail
             # FIXME: send out date & time, page, last_page_num, and source name

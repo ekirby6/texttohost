@@ -1,5 +1,5 @@
 import scrapy  # library used for web scraping
-from datetime import date  # used to get the date stamp of the scrape
+from datetime import date, datetime  # used to get the date & time stamp of the scrape
 
 
 def convert_to_int(str_num):  # used to convert the map stats numbers into numeric integer forms
@@ -16,7 +16,8 @@ class MapSpider(scrapy.Spider):
 
     def start_requests(self):
         # urls for most popular maps: last 7 days
-        urls = ['https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=1'] # testing
+        urls = ['https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=1',
+                'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=2']  # testing
         # urls = [
         #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=1',
         #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=2',
@@ -74,6 +75,7 @@ class MapSpider(scrapy.Spider):
             # map_downloadurl - third party download issues, don't worry about for now
             map_lastupdateddate = map.css(".timeago::text").get()  # date from the last update of the map
             map_dateaccessed = date.today().strftime("%m/%d/%Y")  # date of the scrape in format mm/dd/yyyy
+            map_timeaccessed = datetime.now().time()
             map_source = "planetminecraft last 7 days best"
 
             # map stats (get in string format, then convert to int)
@@ -113,15 +115,15 @@ class MapSpider(scrapy.Spider):
                 'map description URL': map_descriptionurl,
                 'date of last update': map_lastupdateddate,
                 'date accessed': map_dateaccessed,
+                'time accessed': map_timeaccessed,
                 'map source': map_source,
                 'views': map_views,
                 'downloads': map_downloads,
                 'comments': map_comments
             }
 
-        # FIXME: insert algorithm using .pagination_next button or edit page number of URLs in for loop
-        # FIXME: add time accessed attribute (if possible)
-        # FIXME: check if printing all maps from each all time & 7d
+        # FIXME: (Jesse) insert algorithm using .pagination_next button or edit page number of URLs in for loop
+        # FIXME: check if printing all maps from 7d- NO
         # FIXME: convert to pipeline for outputting instead of JSON or CSV
         # FIXME: insert if statement checking if page = last_page_num then output status = Complete, else status = Fail
             # FIXME: send out date & time, page, last_page_num, and source name
