@@ -1,5 +1,6 @@
 import scrapy  # library used for web scraping
 from datetime import date, datetime  # to get the date & time stamp of the scrape
+from ..items import PlanetminecraftItem
 
 
 def convert_to_int(str_num):  # used to convert the map stats numbers into numeric integer forms
@@ -65,6 +66,7 @@ class MapSpider(scrapy.Spider):
             yield scrapy.Request(url=url, callback=self.parse)   # parses the urls by attributes
 
     def parse(self, response):
+        items = PlanetminecraftItem()
         page = response.url[response.url.find('&p=') + 3:]  # grabs the page number from the website url
         filename = 'pmcalltimemaps-%s.html' % page  # need to name the files with different names so use the page number
         with open(filename, 'wb') as f:
@@ -100,18 +102,18 @@ class MapSpider(scrapy.Spider):
             map_downloads = convert_to_int(get_stats(r4s, 'get_app', tag))
             map_comments = convert_to_int(get_stats(r4s, 'chat_bubble', tag))
 
-            yield {
-                'title': map_title,
-                'subtitle': map_subtitle,
-                'author': map_author,
-                'page': page,
-                'page URL': map_pageurl,
-                'map description URL': map_descriptionurl,
-                'date of last update': map_lastupdateddate,
-                'date accessed': map_dateaccessed,
-                'time accessed': map_timeaccessed,
-                'map source': map_source,
-                'views': map_views,
-                'downloads': map_downloads,
-                'comments': map_comments
-            }
+            items['title'] = map_title
+            items['subtitle'] = map_subtitle
+            items['author'] = map_author
+            items['page'] = page
+            items['page_URL'] = map_pageurl
+            items['map_description_URL'] = map_descriptionurl
+            items['date_of_last_update'] = map_lastupdateddate
+            items['date_accessed'] = map_dateaccessed
+            items['time_accessed'] = map_timeaccessed
+            items['map_source'] = map_source
+            items['views'] = map_views
+            items['downloads'] = map_downloads
+            items['comments'] = map_comments
+
+            yield items
