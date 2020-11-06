@@ -109,7 +109,3 @@ class MapSpider(scrapy.Spider):
                 'downloads': map_downloads,
                 'comments': map_comments
             }
-
-        # FIXME: (Jesse) insert algorithm using .pagination_next button or edit page number of URLs in for loop
-        # FIXME: check if printing all maps from all time (yes) & 7d (no)
-        # FIXME: convert to pipeline for outputting instead of JSON or CSV
