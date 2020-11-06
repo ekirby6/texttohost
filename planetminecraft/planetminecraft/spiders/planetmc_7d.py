@@ -1,5 +1,5 @@
 import scrapy  # library used for web scraping
-from datetime import date, datetime  # used to get the date & time stamp of the scrape
+from datetime import date, datetime  # to get the date & time stamp of the scrape
 
 
 def convert_to_int(str_num):  # used to convert the map stats numbers into numeric integer forms
@@ -9,6 +9,16 @@ def convert_to_int(str_num):  # used to convert the map stats numbers into numer
         return int(float(str_num[:-1]) * 1000000)  # Remove the last digit with [:-1], then convert to integer
     else:  # just in case the number doesn't have an m or k
         return int(str_num)  # simply converts to integer
+
+
+def get_stats(r_stats, search_term, tag):
+    if r_stats.find(search_term) != -1:   # if stat is present
+        r5s = r_stats[r_stats.find(search_term):]
+        start = r5s.find('<' + tag + '>') + len('<' + tag + '>')
+        end = r5s.find('</' + tag + '>')
+        return r5s[start:end]
+    else:   # stat=0 if not included in string
+        return str(0)
 
 
 class MapSpider(scrapy.Spider):
@@ -49,7 +59,6 @@ class MapSpider(scrapy.Spider):
             yield scrapy.Request(url=url, callback=self.parse)   # parses the urls by attributes
 
     def parse(self, response):
-        # page = response.url[-1]  # grabs the last char (the page number) from the website url
         page = response.url[response.url.find('&p=') + 3:]  # grabs the page number from the website url
         filename = 'pmc7dmaps-%s.html' % page  # need to name the files with different names so use the page number
         with open(filename, 'wb') as f:
@@ -79,32 +88,11 @@ class MapSpider(scrapy.Spider):
             map_source = "planetminecraft last 7 days best"
 
             # map stats (get in string format, then convert to int)
-            str2 = map.css(".r-stats").get()
-            if str2.find('visibility') != -1 and str2.find('get_app') != -1 and str2.find('chat_bubble') != -1:
-                # if all 3 fields present
-                str_views = str2[str2.find('visibility') + 23:str2.find('get_app') - 33]  # count of map views
-                str_downloads = str2[str2.find('get_app') + 20:str2.find('chat_bubble') - 33]  # count of map downloads
-                str_comments = str2[str2.find('chat_bubble') + 24:str2.find('</span></div>')]  # count of map comments
-            elif str2.find('visibility') != -1 and str2.find('get_app') != -1:  # if have views & downloads
-                str_views = str2[str2.find('visibility') + 23:str2.find('get_app') - 33]
-                str_downloads = str2[str2.find('get_app') + 20:str2.find('</div>')-8]
-                str_comments = 0
-            elif str2.find('visibility') != -1 and str2.find('chat_bubble') != -1:  # if have views & comments
-                str_views = str2[str2.find('visibility') + 23:str2.find('</span></div>') - 59]
-                str_downloads = 0
-                str_comments = str2[str2.find('chat_bubble') + 24:str2.find('</span></div>')]
-            elif str2.find('visibility') != -1:  # if only have views (base case)
-                # always have at least views to be on the popular/best list
-                str_views = str2[str2.find('visibility') + 23:str2.find('</div>') - 9]
-                str_downloads = 0
-                str_comments = 0
-            else:   # if have none of the 3 fields (edge case)
-                str_views = 0
-                str_downloads = 0
-                str_comments = 0
-            map_views = convert_to_int(str_views)  # converting string stats to meaningful integers
-            map_downloads = convert_to_int(str_downloads)
-            map_comments = convert_to_int(str_comments)
+            r4s = map.css(".r-stats").get()   # string that is parsed to get stats
+            tag = 'span'   # tag that is used to parse stats
+            map_views = convert_to_int(get_stats(r4s, 'visibility', tag))
+            map_downloads = convert_to_int(get_stats(r4s, 'get_app', tag))
+            map_comments = convert_to_int(get_stats(r4s, 'chat_bubble', tag))
 
             yield {
                 'title': map_title,
@@ -124,4 +112,4 @@ class MapSpider(scrapy.Spider):
 
         # FIXME: (Jesse) insert algorithm using .pagination_next button or edit page number of URLs in for loop
         # FIXME: check if printing all maps from all time (yes) & 7d (no)
-        # FIXME: convert to pipeline for outputting instead of JSON or CSVe
+        # FIXME: convert to pipeline for outputting instead of JSON or CSV

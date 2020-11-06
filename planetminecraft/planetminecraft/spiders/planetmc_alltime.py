@@ -11,14 +11,23 @@ def convert_to_int(str_num):  # used to convert the map stats numbers into numer
         return int(str_num)  # simply converts to integer
 
 
+def get_stats(r_stats, search_term, tag):
+    if r_stats.find(search_term) != -1:   # if stat is present
+        r5s = r_stats[r_stats.find(search_term):]
+        start = r5s.find('<' + tag + '>') + len('<' + tag + '>')
+        end = r5s.find('</' + tag + '>')
+        return r5s[start:end]
+    else:   # stat=0 if not included in string
+        return str(0)
+
+
 class MapSpider(scrapy.Spider):
     name = "pmc alltime maps"  # call web scraping in the terminal: scrapy crawl "pmc alltime maps" -o pmcalltime.json
 
     def start_requests(self):
         # urls for most popular maps: all time
-        urls = [
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=1',
-            'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=2']  # testing
+        urls = ['https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=1',
+                'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=2']  # testing
         # urls = [
         #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=1',
         #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=2',
@@ -52,13 +61,11 @@ class MapSpider(scrapy.Spider):
         #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=30'
         # ]
 
-        for url in urls:  # the urls we are scraping
-            yield scrapy.Request(url=url, callback=self.parse)  # parses the urls by attributes
+        for url in urls:      # the urls we are scraping
+            yield scrapy.Request(url=url, callback=self.parse)   # parses the urls by attributes
 
     def parse(self, response):
-        last_page_num = 2           # testing- change to actual last page number
-        # page = response.url[-1]  # grabs the last char (the page number) from the website url
-        page = response.url[response.url.find('&p=')+3:]  # grabs the page number from the website url
+        page = response.url[response.url.find('&p=') + 3:]  # grabs the page number from the website url
         filename = 'pmcalltimemaps-%s.html' % page  # need to name the files with different names so use the page number
         with open(filename, 'wb') as f:
             f.write(response.body)
@@ -87,32 +94,11 @@ class MapSpider(scrapy.Spider):
             map_source = "planetminecraft all-time best"
 
             # map stats (get in string format, then convert to int)
-            str2 = map.css(".r-stats").get()
-            if str2.find('visibility') != -1 and str2.find('get_app') != -1 and str2.find('chat_bubble') != -1:
-                # if all 3 fields present
-                str_views = str2[str2.find('visibility') + 23:str2.find('get_app') - 33]  # count of map views
-                str_downloads = str2[str2.find('get_app') + 20:str2.find('chat_bubble') - 33]  # count of map downloads
-                str_comments = str2[str2.find('chat_bubble') + 24:str2.find('</span></div>')]  # count of map comments
-            elif str2.find('visibility') != -1 and str2.find('get_app') != -1:  # if have views & downloads
-                str_views = str2[str2.find('visibility') + 23:str2.find('get_app') - 33]
-                str_downloads = str2[str2.find('get_app') + 20:str2.find('</div>') - 8]
-                str_comments = 0
-            elif str2.find('visibility') != -1 and str2.find('chat_bubble') != -1:  # if have views & comments
-                str_views = str2[str2.find('visibility') + 23:str2.find('</span></div>') - 59]
-                str_downloads = 0
-                str_comments = str2[str2.find('chat_bubble') + 24:str2.find('</span></div>')]
-            elif str2.find('visibility') != -1:  # if only have views (base case)
-                # always have at least views to be on the popular/best list
-                str_views = str2[str2.find('visibility') + 23:str2.find('</div>') - 9]
-                str_downloads = 0
-                str_comments = 0
-            else:  # if have none of the 3 fields (edge case)
-                str_views = 0
-                str_downloads = 0
-                str_comments = 0
-            map_views = convert_to_int(str_views)  # converting string stats to meaningful integers
-            map_downloads = convert_to_int(str_downloads)
-            map_comments = convert_to_int(str_comments)
+            r4s = map.css(".r-stats").get()  # string that is parsed to get stats
+            tag = 'span'  # tag that is used to parse stats
+            map_views = convert_to_int(get_stats(r4s, 'visibility', tag))
+            map_downloads = convert_to_int(get_stats(r4s, 'get_app', tag))
+            map_comments = convert_to_int(get_stats(r4s, 'chat_bubble', tag))
 
             yield {
                 'title': map_title,
@@ -129,13 +115,6 @@ class MapSpider(scrapy.Spider):
                 'downloads': map_downloads,
                 'comments': map_comments
             }
-
-        # print("Status: Complete") if page == last_page_num else print("Status: Failure")
-        # print("Ending time: " + str(map_dateaccessed) + str(map_timeaccessed))
-        # print("Last Page Successfully Scraped: " + str(page - 1))
-        # print("% of Pages Successfully Scraped: " + str((page - 1) / last_page_num))
-        # print("Source Name: PlanetMinecraft All-Time")
-
 
         # FIXME: (Jesse) insert algorithm using .pagination_next button or edit page number of URLs in for loop
         # FIXME: check if printing all maps from all time (yes) & 7d (no)
