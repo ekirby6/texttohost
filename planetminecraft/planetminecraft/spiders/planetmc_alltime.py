@@ -25,42 +25,15 @@ def get_stats(r_stats, search_term, tag):
 class MapSpider(scrapy.Spider):
     name = "pmc alltime maps"  # call web scraping in the terminal: scrapy crawl "pmc alltime maps" -o pmcalltime.json
 
+        #iterates sequentially through pages of most popular maps
     def start_requests(self):
+        for i in range(1, 19815): #change last number here for desired page end (~19,800 total, takes a long time)
+            url = "https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=" + str(i)
+            urls.append(url)
+            
         # urls for most popular maps: all time
-        urls = ['https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=1',
-                'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=2']  # testing
-        # urls = [
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=1',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=2',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=3',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=4',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=5',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=6',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=7',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=8',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=9',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=10',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=11',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=12',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=13',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=14',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=15',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=16',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=17',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=18',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=19',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=20',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=21',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=22',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=23',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=24',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=25',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=26',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=27',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=28',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=29',
-        #     'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=30'
-        # ]
+        #urls = ['https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=1',
+        #        'https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=2']  # testing
 
         for url in urls:      # the urls we are scraping
             yield scrapy.Request(url=url, callback=self.parse)   # parses the urls by attributes
