@@ -25,36 +25,10 @@ def get_stats(r_stats, search_term, tag):
 class MapSpider(scrapy.Spider):
     name = "pmc 7d maps"  # call web scraping in the terminal: scrapy crawl "pmc 7d maps" -o pmc7d.json
 
-    def start_requests(self):
-        # urls for most popular maps: last 7 days
-        urls = ['https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=1',
-                'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=2']  # testing
-        # urls = [
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=1',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=2',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=3',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=4',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=5',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=6',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=7',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=8',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=9',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=10',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=11',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=12',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=13',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=14',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=15',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=16',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=17',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=18',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=19',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=20',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=21',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=22',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=23',
-        #     'https://www.planetminecraft.com/projects/?time_machine=last7d&order=order_popularity&p=24'
-        # ]
+   def start_requests(self):
+        for i in range(1, 24): #change last number here for desired page end (~24 pages for last 7days)
+            url = "https://www.planetminecraft.com/projects/?order=order_popularity&time_machine=all_time&p=" + str(i)
+            urls.append(url) 
 
         for url in urls:      # the urls we are scraping
             yield scrapy.Request(url=url, callback=self.parse)   # parses the urls by attributes
