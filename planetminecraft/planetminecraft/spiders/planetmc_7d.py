@@ -37,9 +37,9 @@ class MapSpider(scrapy.Spider):
         items = PlanetminecraftItem()
         page = response.url[response.url.find('&p=') + 3:]  # grabs the page number from the website url
         filename = 'pmc7dmaps-%s.html' % page  # need to name the files with different names so use the page number
-        with open(filename, 'wb') as f:
-            f.write(response.body)
-        self.log('Saved file %s' % filename)  # logs that it was actually saved
+        #with open(filename, 'wb') as f:
+        #    f.write(response.body)
+        #self.log('Saved file %s' % filename)  # logs that it was actually saved
 
         r3 = response.css(".content")   # found using selector gadget, the center section. start big & get smaller
 
